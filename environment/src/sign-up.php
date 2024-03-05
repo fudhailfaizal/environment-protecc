@@ -67,7 +67,7 @@
 </head>
 <body>
 <div class="flex min-h-screen items-center justify-center bg-green-100">
-  <div class="w-full max-w-md p-8 space-y-3 rounded-xl bg-green-600 shadow-lg">
+  <div class="w-full max-w-md p-8 space-y-3 rounded-xl bg-green-700 shadow-lg">
     <h1 class="text-center text-2xl font-bold text-white">SIGN UP</h1>
     <form class="space-y-6" action="signup.php" method="POST"> <!-- Update action to point to signup.php and use POST method -->
       <div>

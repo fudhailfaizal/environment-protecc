@@ -1,8 +1,3 @@
-<?php
-if (!isset($_SESSION)) {
-    session_start(); // Start session if not already started
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,6 +23,17 @@ if (!isset($_SESSION)) {
       padding: 20px 0;
       text-align: center;
     }
+    .custom-btn {
+            background-color: white;
+            border: 2px solid #10B981;
+            color: #10B981;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .custom-btn:hover {
+            background-color: #10B981;
+            color: white;
+        }
   </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -60,15 +66,15 @@ if (!isset($_SESSION)) {
   <div class="container mx-auto px-4 md:px-6 mt-8">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
       <div class="text-center lg:text-left">
-        <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none">
-          Lodge a Complaint
+      <h1 class="text-center text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none mb-6 text-green-700">
+            Lodge a Complaint
         </h1>
-        <p class="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed mx-auto dark:text-gray-400 mt-4">
-          Report environmental issues in your area. Your voice can help protect our planet.
+        <p class="max-w-[600px] text-center text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed mx-auto dark:text-gray-400 mb-10">
+            Report environmental issues in your area. Your voice can help protect our planet.
         </p>
       </div>
       <div class="text-right">
-        <a href="create-complaint.php" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow">Submit Complaint</a>
+        <a href="create-complaint.php" class="custom-btn py-2 px-4 rounded-lg">Submit Complaint</a>
       </div>
     </div>
     <div class="py-12 lg:py-24">
@@ -124,7 +130,7 @@ if (isset($_SESSION['email'])) {
         } else {
             echo "<p class='text-center text-xl font-semibold'>No complaints yet.</p>";
             echo "<div class='flex justify-center mt-4'>";
-            echo "<a href='create-complaint.php' class='inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow'>Make Your First Complaint</a>";
+            echo "<a href='create-complaint.php' class='custom-btn py-2 px-4 rounded-lg'>Make Your First Complaint</a>";
             echo "</div>";
         }
     } else {

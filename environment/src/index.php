@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Save Our Environment</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         /* Custom styles */
@@ -40,6 +40,30 @@
             background-color: #10B981;
             color: white;
         }
+
+        /* Overlay styles */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            backdrop-filter: blur(8px); /* Apply blur effect */
+            -webkit-backdrop-filter: blur(8px); /* For Safari */
+        }
+
+        .overlay-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 1.0); /* Semi-transparent white */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 
@@ -60,19 +84,11 @@
         </div>
 
         <div class="flex items-center space-x-2">
-            <a href="sign-in.php">
-                <button
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-green-700 hover:bg-green-600 text-white">Login</button>
-            </a>
-            <a href="sign-up.php">
-                <button
-                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white border border-green-700 hover:bg-green-700 hover:text-white h-10 px-4 py-2">Sign
-                    Up</button>
-            </a>
+            <a href="#" onclick="showOverlay('signInOverlay')" class="text-green-700">Login</a>
+            <a href="#" onclick="showOverlay('signUpOverlay')" class="text-green-700">Sign Up</a>
         </div>
 
     </nav>
-    
 
     <div class="container mx-auto px-4 md:px-6 mt-8 flex flex-col justify-center items-center h-full">
         <h1 class="text-center text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none mb-6 text-green-700">
@@ -82,11 +98,76 @@
             Report environmental issues in your area. Your voice can help protect our planet.
         </p>
         <div class="flex space-x-4">
-            <a href="sign-in.php" class="custom-btn py-2 px-4 rounded-lg">Login to view complaints</a>
-            <a href="sign-up.php" class="custom-btn py-2 px-4 rounded-lg">Sign up to create complaints</a>
+            <a href="#" onclick="showOverlay('signInOverlay')" class="custom-btn py-2 px-4 rounded-lg">Login to view complaints</a>
+            <a href="#" onclick="showOverlay('signUpOverlay')" class="custom-btn py-2 px-4 rounded-lg">Sign up to create complaints</a>
         </div>
     </div>
-    
+
+    <!-- Sign In Overlay -->
+    <div id="signInOverlay" class="overlay">
+        <div class="overlay-content">
+            <button class="absolute top-4 right-4 text-gray-700 hover:text-gray-900" onclick="hideOverlay('signInOverlay')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <h1 class="text-center text-2xl font-bold text-gray-800 mb-4">Sign In</h1>
+            <form class="space-y-6" action="signin.php" method="post">
+                <div>
+                    <label for="signInName" class="sr-only">Name</label>
+                    <input name="name" class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full" id="signInName" placeholder="Name" type="text" fdprocessedid="drtkc">
+                </div>
+                <div>
+                    <label for="signInPassword" class="sr-only">Password</label>
+                    <input name="password" class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full" id="signInPassword" placeholder="Password" type="password" fdprocessedid="6n6gq">
+                </div>
+                <div>
+                    <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 w-full bg-white text-green-600" fdprocessedid="r7gs1e">SignIn</button>
+                </div>
+            </form>
+            <p class="text-center text-sm text-gray-800">Don't have an account yet? <a class="text-green-600 underline" href="#" onclick="showOverlay('signUpOverlay'); hideOverlay('signInOverlay')">Sign up</a></p>
+        </div>
+    </div>
+
+    <!-- Sign Up Overlay -->
+    <div id="signUpOverlay" class="overlay">
+        <div class="overlay-content">
+            <button class="absolute top-4 right-4 text-gray-700 hover:text-gray-900" onclick="hideOverlay('signUpOverlay')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <h1 class="text-center text-2xl font-bold text-gray-800 mb-4">Sign Up</h1>
+            <form class="space-y-6" action="signup.php" method="post">
+                <div>
+                    <label for="signUpName" class="sr-only">Name</label>
+                    <input name="name" class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full" id="signUpName" placeholder="Name" type="text" fdprocessedid="drtkc">
+                </div>
+                <div>
+                    <label for="signUpEmail" class="sr-only">Email</label>
+                    <input name="email" class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full" id="signUpEmail" placeholder="Email" type="email" fdprocessedid="57hie">
+                </div>
+                <div>
+                    <label for="signUpCity" class="sr-only">City</label>
+                    <input name="city" class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full" id="signUpCity" placeholder="City" type="text" fdprocessedid="j9hbye">
+                </div>
+                <div>
+                    <label for="signUpPassword" class="sr-only">Password</label>
+                    <input name="password" class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full" id="signUpPassword" placeholder="Password" type="password" fdprocessedid="6n6gq">
+                </div>
+                <div>
+                    <label for="signUpConfirmPassword" class="sr-only">Confirm Password</label>
+                    <input name="confirmPassword" class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full" id="signUpConfirmPassword" placeholder="Confirm Password" type="password" fdprocessedid="whns63">
+                </div>
+                <div>
+                    <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 w-full bg-white text-green-600" fdprocessedid="r7gs1e">SignUp</button>
+                </div>
+            </form>
+            <p class="text-center text-sm text-gray-800">Already have an account? <a class="text-green-600 underline" href="#" onclick="showOverlay('signInOverlay'); hideOverlay('signUpOverlay')">Sign in</a></p>
+        </div>
+    </div>
 
     <footer class="border-t mt-auto">
         <div class="container flex flex-col md:flex-row items-center justify-between py-4 space-y-4 md:space-y-0">
@@ -115,11 +196,22 @@
                     Contact
                 </a>
             </nav>
-            <p class="text-sm text-gray-500 dark:text-gray-400 sm:order-first">
-                Copyright © 2023 Enviro Inc. All rights reserved.
-            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">&copy; 2024 Save Our Environment. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        // JavaScript functions to show/hide overlay
+        function showOverlay(overlayId) {
+            document.getElementById(overlayId).style.display = "block";
+            document.body.style.overflow = "hidden"; // Prevent scrolling when overlay is open
+        }
+
+        function hideOverlay(overlayId) {
+            document.getElementById(overlayId).style.display = "none";
+            document.body.style.overflow = ""; // Restore scrolling
+        }
+    </script>
 </body>
 
 </html>

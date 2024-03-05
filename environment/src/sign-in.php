@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="flex min-h-screen items-center justify-center bg-green-100">
-  <div class="w-full max-w-md p-8 space-y-3 rounded-xl bg-green-600 shadow-lg">
+  <div class="w-full max-w-md p-8 space-y-3 rounded-xl bg-green-700 shadow-lg">
     <h1 class="text-center text-2xl font-bold text-white">SIGN IN</h1>
     <form class="space-y-6" action="signin.php" method="post"> <!-- Update action to point to signin.php and use POST method -->
       <div>
