@@ -8,6 +8,16 @@
 </head>
 <body>
 <?php include 'navigation.php'; ?>
+<!-- Display the email at the top of the page -->
+<?php
+session_start(); // Start session
+if(isset($_SESSION['email'])) {
+    $email = $_SESSION['email']; // Extract email from session
+    echo "<p>Email: $email</p>"; // Display email
+} else {
+    echo "<p>Email not found</p>"; // Display error if email not found in session
+}
+?>
   <div class="flex bg-white rounded-lg shadow-md p-4 flex-wrap">
     <div class="w-full md:w-1/3 pr-2">
       <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
@@ -16,10 +26,7 @@
           <label for="complainer" class="block text-sm font-medium mb-2">Complainer:</label>
           <input name="complainer" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="complainer" placeholder="Full Name" required>
         </div>
-        <div class="mb-4">
-          <label for="email" class="block text-sm font-medium mb-2">Email:</label>
-          <input name="email" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="email" placeholder="Email Address" type="email" required>
-        </div>
+        <input name="email" type="hidden" value="<?php echo $_GET['email']; ?>">
         <div class="mb-4">
           <label for="report-address" class="block text-sm font-medium mb-2">Report Address:</label>
           <input name="report-address" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="report-address" placeholder="Address of the Incident">
@@ -102,11 +109,12 @@
       </form>
     </div>
   </div>
+  <div id="successMessage" style="display: none;">Complaint submitted successfully!</div>
 
 
   <?php include 'footer.php'; ?>
 
-  <script>
+  <!-- <script>
     // JavaScript to show success message on form submission
     document.addEventListener("DOMContentLoaded", function() {
       const complaintForm = document.getElementById('complaintForm');
@@ -129,6 +137,6 @@
         }, 3000);
       });
     });
-  </script>
+  </script> -->
 </body>
 </html>

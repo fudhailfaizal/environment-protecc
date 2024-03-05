@@ -13,7 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows > 0) {
         // User exists, set session variables
-        $_SESSION['name'] = $name;
+        $user = $result->fetch_assoc();
+        $_SESSION['name'] = $user['name'];
+        $_SESSION['email'] = $user['email']; // Assuming the email is stored in the 'email' column
         // Redirect to authenticated page
         header("Location: authenticated.php");
         exit();
