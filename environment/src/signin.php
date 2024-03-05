@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // SQL query to check if user exists
-    $sql = "SELECT * FROM Users WHERE name='$name' AND password='$password'";
+    $sql = "SELECT * FROM users WHERE name='$name' AND password='$password'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -16,9 +16,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $result->fetch_assoc();
         $_SESSION['name'] = $user['name'];
         $_SESSION['email'] = $user['email']; // Assuming the email is stored in the 'email' column
-        // Redirect to authenticated page
-        header("Location: authenticated.php");
-        exit();
+        
+        // Redirect users based on their roles
+        if ($user['user_type'] == 'admin') {
+            header("Location: admin-dash.php");
+            exit();
+        } elseif ($user['user_type'] == 'field officer') {
+            header("Location: field-officer-dash.php");
+            exit();
+        } else {
+            // For default users, redirect to authenticated page
+            header("Location: authenticated.php");
+            exit();
+        }
     } else {
         // User does not exist, handle error
         echo "Invalid username or password";

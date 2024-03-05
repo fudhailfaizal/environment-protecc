@@ -48,7 +48,7 @@ if (!isset($_SESSION)) {
     <?php
     if (isset($_SESSION['name'])) {
         echo "<p class='text-gray-700 font-semibold'>Welcome, {$_SESSION['name']}</p>";
-        echo "<a href='logout.php'><button class='inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-red-500 hover:bg-red-600 text-white'>Logout</button></a>";
+        echo "<a href='index.php'><button class='inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-red-500 hover:bg-red-600 text-white'>Logout</button></a>";
     } else {
         header("Location: sign-in.php"); // Redirect to sign-in page if not logged in
         exit();
@@ -73,63 +73,72 @@ if (!isset($_SESSION)) {
     </div>
     <div class="py-12 lg:py-24">
       <div class="container mx-auto px-4 md:px-6">
-        <?php
-        // Database connection
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $database = "environment";
-        $conn = new mysqli($servername, $username, $password, $database);
-        if ($conn->connect_error) {
-          die("Connection failed: " . $conn->connect_error);
-        }
+      <?php
+if (!isset($_SESSION)) {
+    session_start(); // Start session if not already started
+}
 
-        // Fetching user's complaints
-        if (isset($_SESSION['user_id'])) {
-            $userId = $_SESSION['user_id'];
-            $sql = "SELECT * FROM complaints WHERE user_id = '$userId'";
-            $result = $conn->query($sql);
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "environment";
+$conn = new mysqli($servername, $username, $password, $database);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-            if ($result) {
-                if ($result->num_rows > 0) {
-                    echo "<div class='overflow-auto border border-gray-200 rounded-lg dark:border-gray-800'>";
-                    echo "<table class='min-w-full'>";
-                    echo "<thead>";
-                    echo "<tr class='border-b border-gray-200 dark:border-gray-800'>";
-                    echo "<th class='px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400'>Date</th>";
-                    echo "<th class='px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400'>Location</th>";
-                    echo "<th class='px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400'>Issue</th>";
-                    echo "<th class='px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400'>Status</th>";
-                    echo "</tr>";
-                    echo "</thead>";
-                    echo "<tbody class='divide-y divide-gray-200 dark:divide-gray-800'>";
-                    while($row = $result->fetch_assoc()) {
-                        echo "<tr class='hover:bg-gray-50 dark:hover:bg-gray-950'>";
-                        echo "<td class='px-4 py-3 text-sm text-gray-900'>" . $row["incident_date"] . "</td>";
-                        echo "<td class='px-4 py-3 text-sm text-gray-900'>" . $row["report_address"] . ", " . $row["report_city"] . "</td>";
-                        echo "<td class='px-4 py-3 text-sm text-gray-900'>" . $row["description"] . "</td>";
-                        echo "<td class='px-4 py-3 text-sm text-gray-900'>" . $row["status"] . "</td>";
-                        echo "</tr>";
-                    }
-                    echo "</tbody>";
-                    echo "</table>";
-                    echo "</div>";
-                } else {
-                    echo "<p class='text-center text-xl font-semibold'>No complaints yet.</p>";
-                    echo "<div class='flex justify-center mt-4'>";
-                    echo "<a href='create-complaint.php' class='inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow'>Make Your First Complaint</a>";
-                    echo "</div>";
-                }
-            } else {
-                echo "<p class='text-center text-xl font-semibold'>Error fetching complaints.</p>";
+// Check if user is logged in
+if (isset($_SESSION['email'])) {
+    // Retrieve email from session
+    $email = $_SESSION['email'];
+
+    // Fetching user's complaints
+    $sql = "SELECT * FROM complaints WHERE email = '$email'";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        if ($result->num_rows > 0) {
+            echo "<div class='overflow-auto border border-gray-200 rounded-lg dark:border-gray-800'>";
+            echo "<table class='min-w-full'>";
+            echo "<thead>";
+            echo "<tr class='border-b border-gray-200 dark:border-gray-800'>";
+            echo "<th class='px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400'>Date</th>";
+            echo "<th class='px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400'>Location</th>";
+            echo "<th class='px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400'>Issue</th>";
+            echo "<th class='px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400'>Status</th>";
+            echo "</tr>";
+            echo "</thead>";
+            echo "<tbody class='divide-y divide-gray-200 dark:divide-gray-800'>";
+            while($row = $result->fetch_assoc()) {
+                echo "<tr class='hover:bg-gray-50 dark:hover:bg-gray-950'>";
+                echo "<td class='px-4 py-3 text-sm text-gray-900'>" . $row["incident_date"] . "</td>";
+                echo "<td class='px-4 py-3 text-sm text-gray-900'>" . $row["report_address"] . ", " . $row["report_city"] . "</td>";
+                echo "<td class='px-4 py-3 text-sm text-gray-900'>" . $row["description"] . "</td>";
+                echo "<td class='px-4 py-3 text-sm text-gray-900'>" . $row["status"] . "</td>";
+                echo "</tr>";
             }
+            echo "</tbody>";
+            echo "</table>";
+            echo "</div>";
         } else {
-            echo "<p class='text-center text-xl font-semibold'>User ID not found.</p>";
+            echo "<p class='text-center text-xl font-semibold'>No complaints yet.</p>";
+            echo "<div class='flex justify-center mt-4'>";
+            echo "<a href='create-complaint.php' class='inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow'>Make Your First Complaint</a>";
+            echo "</div>";
         }
+    } else {
+        echo "<p class='text-center text-xl font-semibold'>Error fetching complaints.</p>";
+    }
+} else {
+    header("Location: sign-in.php"); // Redirect to sign-in page if not logged in
+    exit();
+}
 
-        // Close connection
-        $conn->close();
-        ?>
+// Close connection
+$conn->close();
+?>
+
       </div>
     </div>
   </div>
