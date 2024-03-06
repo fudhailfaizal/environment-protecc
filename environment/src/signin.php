@@ -15,7 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // User exists, set session variables
         $user = $result->fetch_assoc();
         $_SESSION['name'] = $user['name'];
-        $_SESSION['email'] = $user['email']; // Assuming the email is stored in the 'email' column
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['user_type'] = $user['user_type']; // Assuming the email is stored in the 'email' column
         
         // Redirect users based on their roles
         if ($user['user_type'] == 'admin') {
@@ -26,12 +27,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             // For default users, redirect to authenticated page
+            $_SESSION['status'] = "Login successful!";
+            $_SESSION['alert_type'] = "success";
             header("Location: authenticated.php");
             exit();
         }
     } else {
         // User does not exist, handle error
-        echo "Invalid username or password";
+        $_SESSION['status'] = "Invalid username or password";
+        $_SESSION['alert_type'] = "danger";
+        header("Location: index.php");
+        exit();
     }
 }
 ?>

@@ -1,35 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php include 'access.php';?>
+<?php include 'header.php';?>
   <title>Field Officer Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* Custom styles */
+    html, body {
+      height: 100%;
+    }
+    .container {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 1200px; /* Adjust as needed */
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    footer {
+      margin-top: auto;
+      background-color: #f9f9f9;
+      padding: 20px 0;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-<nav class="bg-white px-4 py-2 flex justify-between items-center">
-    <!-- Navigation links -->
-    <div class="flex items-center space-x-4">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500 h-6 w-6">
-        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
-        <line x1="4" x2="4" y1="22" y2="15"></line>
-      </svg>
-      <a class="text-gray-700 hover:text-gray-900" href="#">Mail</a>
-
-    </div>
-    
-    <div class="flex items-center space-x-2">
-    <?php
-    if (isset($_SESSION['name'])) {
-        echo "<p class='text-gray-700 font-semibold'>Welcome, {$_SESSION['name']}</p>";
-        echo "<a href='index.php'><button class='inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-red-500 hover:bg-red-600 text-white'>Logout</button></a>";
-    } else {
-        header("Location: sign-in.php"); // Redirect to sign-in page if not logged in
-        exit();
-    }
-    ?>
+<?php include 'navbar.php'; ?>
+<?php
+if(isset($_SESSION['status'])) {
+    $alert_type = isset($_SESSION['alert_type']) ? $_SESSION['alert_type'] : "success";
+?>
+<div class="alert alert-<?php echo $alert_type; ?> alert-dismissible fade show" role="alert">
+    <strong><?php echo ($alert_type == "success") ? "Success!" : "Error!"; ?></strong> <?php echo $_SESSION['status']; ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-  </nav>
+<?php
+unset($_SESSION['status']);
+unset($_SESSION['alert_type']);
+}
+?>
+
   <div class="min-h-screen bg-gray-100 p-8">
     <div class="max-w-6xl mx-auto">
       <h1 class="text-3xl font-semibold text-gray-900 mb-8">Field Officer Dashboard</h1>
@@ -120,16 +127,11 @@
               </div>
             </div>
           </div>
-          <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2" id="updateStatusBtn">Update Status</button>
+          <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-green-600 text-white hover:bg-green-700 hover:text-white h-10 px-4 py-2" id="updateStatusBtn">Update Status</button>
+
         </div>
       </div>
-      <div class="mt-8">
-      <form id="sendMessageForm">
-        <textarea name="message" id="message" class="flex min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full" placeholder="Message"></textarea>
-        <input type="text" name="reportID" id="reportID" class="hidden">
-        <input type="hidden" name="status" id="selectedStatus" value="">
-        <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 mt-4">Send Message</button>
-      </form>
+
     </div>
     </div>
   </div>
@@ -140,6 +142,7 @@
     const statusOptions = document.getElementById('statusOptions');
     const selectedStatus = document.getElementById('selectedStatus');
     const reportIDField = document.getElementById('reportID');
+    const reportIDMessageField = document.getElementById('reportIDMessage');
     const updateStatusBtn = document.getElementById('updateStatusBtn');
 
     statusDropdown.addEventListener('click', () => {
@@ -170,32 +173,33 @@
       };
       xhr.send(`reportID=${reportID}&status=${status}`);
     });
+
     document.addEventListener("DOMContentLoaded", function () {
-  const sendMessageForm = document.getElementById("sendMessageForm");
+      const sendMessageForm = document.getElementById("sendMessageForm");
 
-  sendMessageForm.addEventListener("submit", function (event) {
-    event.preventDefault();
+      sendMessageForm.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    const reportID = document.getElementById("reportID").value;
-    const message = document.getElementById("message").value;
+        const reportID = document.getElementById("reportIDMessage").value;
+        const message = document.getElementById("message").value;
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "send_email.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          // Email sent successfully
-          alert("Email sent successfully.");
-        } else {
-          // Error sending email
-          alert("Failed to send email. Please try again.");
-        }
-      }
-    };
-    xhr.send("reportID=" + encodeURIComponent(reportID) + "&message=" + encodeURIComponent(message));
-  });
-});
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "send_email.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              // Email sent successfully
+              alert("Email sent successfully.");
+            } else {
+              // Error sending email
+              alert("Failed to send email. Please try again.");
+            }
+          }
+        };
+        xhr.send("reportID=" + encodeURIComponent(reportID) + "&message=" + encodeURIComponent(message));
+      });
+    });
 
   </script>
 </body>

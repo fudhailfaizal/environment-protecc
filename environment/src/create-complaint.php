@@ -1,38 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<?php include 'access.php';?>
+<?php include 'header.php';?>
   <title>Create Complaint!</title>
+  <style>
+    /* Custom styles */
+    html, body {
+      height: 100%;
+    }
+    .container {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 1200px; /* Adjust as needed */
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    footer {
+      margin-top: auto;
+      background-color: #f9f9f9;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .custom-btn {
+            background-color: white;
+            border: 2px solid #10B981;
+            color: #10B981;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .custom-btn:hover {
+            background-color: #10B981;
+            color: white;
+        }
+  </style>
 </head>
 <body>
-<nav class="bg-white px-4 py-2 flex justify-between items-center">
-    <!-- Navigation links -->
-    <div class="flex items-center space-x-4">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500 h-6 w-6">
-        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
-        <line x1="4" x2="4" y1="22" y2="15"></line>
-      </svg>
-      <a class="text-gray-700 hover:text-gray-900" href="#">About Us</a>
-      <a class="text-gray-700 hover:text-gray-900" href="#">Meet The Team</a>
-      <a class="text-gray-700 hover:text-gray-900" href="#">Our Projects</a>
-      <a class="text-gray-700 hover:text-gray-900" href="#">Contact Us</a>
-    </div>
-    
-    <div class="flex items-center space-x-2">
-    <?php
-    if (isset($_SESSION['name'])) {
-        echo "<p class='text-gray-700 font-semibold'>Submit Complaint</p>";
-        echo "<a href='authenticated.php'><button class='inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-white border-2 border-green-500 text-green-500 hover:bg-green-500 hover:border-green-500 hover:text-white'>Go Back Home</button></a>";
-    } else {
-        header("Location: sign-in.php"); // Redirect to sign-in page if not logged in
-        exit();
-    }
-    ?>
-
+<?php include 'navbar.php'; ?>
+<?php
+if(isset($_SESSION['status'])) {
+    $alert_type = isset($_SESSION['alert_type']) ? $_SESSION['alert_type'] : "success";
+?>
+<div class="alert alert-<?php echo $alert_type; ?> alert-dismissible fade show" role="alert">
+    <strong><?php echo ($alert_type == "success") ? "Success!" : "Error!"; ?></strong> <?php echo $_SESSION['status']; ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-  </nav>
+<?php
+unset($_SESSION['status']);
+unset($_SESSION['alert_type']);
+}
+?>
   <div class="flex bg-white rounded-lg shadow-md p-4 flex-wrap">
     <div class="w-full md:w-1/3 pr-2">
       <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
@@ -129,7 +143,7 @@
 
   <?php include 'footer.php'; ?>
 
-  <!-- <script>
+  <script>
     // JavaScript to show success message on form submission
     document.addEventListener("DOMContentLoaded", function() {
       const complaintForm = document.getElementById('complaintForm');
@@ -152,6 +166,6 @@
         }, 3000);
       });
     });
-  </script> -->
+  </script>
 </body>
 </html>

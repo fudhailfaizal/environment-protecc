@@ -9,14 +9,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
 
     if ($conn->query($sql) === TRUE) {
         // User deleted successfully
-        echo "User deleted successfully";
+        $_SESSION['status'] = "User deleted successfully";
+        $_SESSION['alert_type'] = "success";
+        header("Location: admin-dash.php"); // Redirect to admin dashboard
+        exit();
     } else {
         // Error occurred, handle error
-        echo "Error deleting user: " . $conn->error;
+        $_SESSION['status'] = "Error deleting user: " . $conn->error;
+        $_SESSION['alert_type'] = "danger";
+        header("Location: admin-dash.php"); // Redirect to admin dashboard
+        exit();
     }
 } else {
     // Handle invalid request
-    echo "Invalid request";
+    $_SESSION['status'] = "Invalid request";
+    $_SESSION['alert_type'] = "danger";
+    header("Location: admin-dash.php"); // Redirect to admin dashboard
+    exit();
 }
 
 $conn->close();

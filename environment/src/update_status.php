@@ -22,10 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['reportID']) && isset($
     $sql = "UPDATE complaints SET status='$status' WHERE id='$reportID'";
     if ($conn->query($sql) === TRUE) {
         // Status updated successfully
+        $_SESSION['status'] = "Status updated successfully";
+        $_SESSION['alert_type'] = "success";
         http_response_code(200);
         exit();
     } else {
         // Error updating status
+        $_SESSION['status'] = "Error updating status: " . $conn->error;
+        $_SESSION['alert_type'] = "danger";
         http_response_code(500);
         exit();
     }

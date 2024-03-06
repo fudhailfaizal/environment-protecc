@@ -41,11 +41,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Execute query
     if ($conn->query($sql) === TRUE) {
-        // Complaint submitted successfully, perform any actions needed
-        echo "Complaint submitted successfully";
+        // Complaint submitted successfully, set success message
+        $_SESSION['status'] = "Complaint submitted successfully";
+        $_SESSION['alert_type'] = "success";
     } else {
-        // Error occurred, handle error
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        // Error occurred, set error message
+        $_SESSION['status'] = "Error: " . $sql . "<br>" . $conn->error;
+        $_SESSION['alert_type'] = "danger";
     }
+    
+    // Redirect back to the complaint submission form
+    header("Location: complaint_submission_form.php");
+    exit();
 }
 ?>

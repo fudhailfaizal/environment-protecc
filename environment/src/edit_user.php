@@ -14,10 +14,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         // User data updated successfully
-        echo "User data updated successfully";
+        $_SESSION['status'] = "User data updated successfully";
+        $_SESSION['alert_type'] = "success";
+        header("Location: admin-dash.php"); // Redirect to admin dashboard
+        exit();
     } else {
         // Error occurred, handle error
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        $_SESSION['status'] = "Error: " . $sql . "<br>" . $conn->error;
+        $_SESSION['alert_type'] = "danger";
+        header("Location: admin-dash.php"); // Redirect to admin dashboard
+        exit();
     }
 }
 ?>

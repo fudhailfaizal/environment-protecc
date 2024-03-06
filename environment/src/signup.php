@@ -12,11 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO Users (name, email, city, password) VALUES ('$name', '$email', '$city', '$password')";
 
     if ($conn->query($sql) === TRUE) {
-        // New user added successfully, redirect to sign-in page or perform other actions
-        header("Location: sign-in.php");
+        // New user added successfully
+        $_SESSION['status'] = "Account created successfully!";
+        $_SESSION['alert_type'] = "success";
+        header("Location: index.php");
     } else {
-        // Error occurred, handle error
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        // Error occurred
+        $_SESSION['status'] = "Account creation failed: " . $conn->error;
+        $_SESSION['alert_type'] = "danger";
     }
 }
 ?>

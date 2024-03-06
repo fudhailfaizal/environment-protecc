@@ -15,11 +15,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO Users (name, email, city, user_type, password) VALUES ('$name', '$email', '$city', '$userType', '$password')";
 
     if ($conn->query($sql) === TRUE) {
-        // New user added successfully, redirect to sign-in page or perform other actions
-        header("Location: admin-dash.php");
+        // New user added successfully
+        $_SESSION['status'] = "New user added successfully";
+        $_SESSION['alert_type'] = "success";
+        header("Location: admin-dash.php"); // Redirect to admin dashboard
+        exit();
     } else {
         // Error occurred, handle error
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        $_SESSION['status'] = "Error: " . $sql . "<br>" . $conn->error;
+        $_SESSION['alert_type'] = "danger";
+        header("Location: admin-dash.php"); // Redirect to admin dashboard
+        exit();
     }
 }
 ?>
