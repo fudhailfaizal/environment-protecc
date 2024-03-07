@@ -47,6 +47,7 @@ unset($_SESSION['status']);
 unset($_SESSION['alert_type']);
 }
 ?>
+
   <div class="flex bg-white rounded-lg shadow-md p-4 flex-wrap">
     <div class="w-full md:w-1/3 pr-2">
       <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
@@ -138,12 +139,12 @@ unset($_SESSION['alert_type']);
       </form>
     </div>
   </div>
-  <div id="successMessage" style="display: none;">Complaint submitted successfully!</div>
+  <!-- <div id="successMessage" style="display: none;">Complaint submitted successfully!</div> -->
 
 
   <?php include 'footer.php'; ?>
 
-  <script>
+  <!-- <script>
     // JavaScript to show success message on form submission
     document.addEventListener("DOMContentLoaded", function() {
       const complaintForm = document.getElementById('complaintForm');
@@ -166,6 +167,6 @@ unset($_SESSION['alert_type']);
         }, 3000);
       });
     });
-  </script>
+  </script> -->
 </body>
 </html>

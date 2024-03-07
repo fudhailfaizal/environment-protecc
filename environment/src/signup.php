@@ -8,8 +8,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $city = $_POST['city'];
     $password = $_POST['password'];
 
+    $userType = "default user";
+
     // SQL query to insert new user into database
-    $sql = "INSERT INTO Users (name, email, city, password) VALUES ('$name', '$email', '$city', '$password')";
+    $sql = "INSERT INTO Users (name, email, city, user_type, password) VALUES ('$name', '$email', '$city', '$userType', '$password')";
 
     if ($conn->query($sql) === TRUE) {
         // New user added successfully

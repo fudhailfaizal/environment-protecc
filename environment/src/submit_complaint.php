@@ -1,5 +1,21 @@
 <?php
+// Debugging output to display form data
+foreach ($_POST as $key => $value) {
+    echo "$key: $value<br>";
+}
+
+
+session_start();
 include 'db_connection.php'; // Include the database connection script
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Debugging output to display form data
+echo "<pre>";
+print_r($_POST);
+echo "</pre>";
+
 
 // Initialize email variable
 $email = "";
@@ -40,18 +56,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO complaints (complainer, email, report_address, report_city, report_zip, institution, violation_active, incident_date, emergency, intention, violation_method, affected_subjects, description, status) VALUES ('$complainer', '$email', '$report_address', '$report_city', '$report_zip', '$institution', '$violation_active', '$incident_date', '$emergency', '$intention', '$violation_method', '$affected_subjects', '$description', 'Pending')";
 
     // Execute query
-    if ($conn->query($sql) === TRUE) {
-        // Complaint submitted successfully, set success message
-        $_SESSION['status'] = "Complaint submitted successfully";
-        $_SESSION['alert_type'] = "success";
-    } else {
-        // Error occurred, set error message
-        $_SESSION['status'] = "Error: " . $sql . "<br>" . $conn->error;
-        $_SESSION['alert_type'] = "danger";
-    }
+        if ($conn->query($sql) === TRUE) {
+            // Complaint submitted successfully, set success message
+            $_SESSION['status'] = "Complaint submitted successfully";
+            $_SESSION['alert_type'] = "success";
+        } else {
+            // Error occurred, set error message
+            $_SESSION['status'] = "Error: " . $conn->error;
+            $_SESSION['alert_type'] = "danger";
+            echo "SQL Error: " . $conn->error;
+        }
+
     
     // Redirect back to the complaint submission form
-    header("Location: complaint_submission_form.php");
+    header("Location: create-complaint.php");
     exit();
 }
 ?>
